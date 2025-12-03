@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Control de Modelos 3D – Three.js</title>
+  <link rel="stylesheet" href="main.css" />
+</head>
+<body>
+  <main class="page">
+    <header class="header">
+      <p class="badge">PRÁCTICA – THREE.JS</p>
+      <h1>Control de Modelos 3D</h1>
+      <p class="subtitle">
+        Carga y visualización de modelos usando <span>Three.js</span> y diferentes loaders.
+      </p>
+    </header>
+
+    <section class="cards-grid">
+      <!-- FBX -->
+      <article class="card">
+        <div class="card-icon">🕺</div>
+        <h3>FBX Loader</h3>
+        <p class="card-tag">Modelo animado (FBX)</p>
+        <p class="card-desc">
+          Carga y animación de un modelo FBX (abeja / personaje) usando
+          <strong>FBXLoader</strong>.
+        </p>
+        <a class="card-link" href="webgl_loader_fbx.html">Ver escena →</a>
+      </article>
+
+      <!-- Collada Kinematics -->
+      <article class="card">
+        <div class="card-icon">🤖</div>
+        <h3>Collada – Kinematics</h3>
+        <p class="card-tag">Robot articulado (DAE)</p>
+        <p class="card-desc">
+          Ejemplo de cinemática en un brazo robótico cargado con
+          <strong>ColladaLoader</strong>.
+        </p>
+        <a class="card-link" href="webgl_loader_collada_kinematics.html">Ver escena →</a>
+      </article>
+
+      <!-- Collada Skinning -->
+      <article class="card">
+        <div class="card-icon">🧍</div>
+        <h3>Collada – Skinning</h3>
+        <p class="card-tag">Animación esquelética</p>
+        <p class="card-desc">
+          Modelo con animación esquelética usando el formato
+          <strong>Collada</strong>.
+        </p>
+        <a class="card-link" href="webgl_loader_collada_skinning.html">Ver escena →</a>
+      </article>
+
+      <!-- Collada estático -->
+      <article class="card">
+        <div class="card-icon">📦</div>
+        <h3>Collada Loader</h3>
+        <p class="card-tag">Modelo estático (DAE)</p>
+        <p class="card-desc">
+          Carga básica de un modelo Collada estático para visualización simple.
+        </p>
+        <a class="card-link" href="webgl_loader_collada.html">Ver escena →</a>
+      </article>
+
+      <!-- glTF AVIF -->
+      <article class="card">
+        <div class="card-icon">🎨</div>
+        <h3>glTF – Texturas AVIF</h3>
+        <p class="card-tag">Optimización de texturas</p>
+        <p class="card-desc">
+          Render de modelos glTF usando texturas en formato
+          <strong>AVIF</strong> para mejor compresión.
+        </p>
+        <a class="card-link" href="webgl_loader_gltf_avif.html">Ver escena →</a>
+      </article>
+
+      <!-- glTF Compressed -->
+      <article class="card">
+        <div class="card-icon">🧊</div>
+        <h3>glTF – Compressed</h3>
+        <p class="card-tag">Draco / Compresión</p>
+        <p class="card-desc">
+          Carga de modelos glTF comprimidos con <strong>Draco</strong> para reducir peso.
+        </p>
+        <a class="card-link" href="webgl_loader_gltf_compressed.html">Ver escena →</a>
+      </article>
+    </section>
+
+    <footer class="footer">
+      <p>Práctica de graficación 3D con Three.js · Modelos cargados desde distintos formatos.</p>
+    </footer>
+  </main>
+</body>
+</html>
