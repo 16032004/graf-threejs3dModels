@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Control de Modelos 3D – Three.js</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    :root {
+      --bg: #050816;
+      --card: #0b1120;
+      --accent: #38bdf8;
+      --accent-soft: rgba(56, 189, 248, 0.2);
+      --text-main: #e5e7eb;
+      --text-muted: #9ca3af;
+      --shadow-soft: 0 20px 35px rgba(0, 0, 0, 0.55);
+      --radius-xl: 18px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #0f172a 0, #020617 45%, #000 100%);
+      min-height: 100vh;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .wrapper {
+      max-width: 1100px;
+      width: 100%;
+    }
+
+    .card {
+      background: radial-gradient(circle at top left, #1e293b 0, #020617 50%);
+      border-radius: 24px;
+      padding: 32px 28px 26px;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      backdrop-filter: blur(18px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: -120px;
+      background: radial-gradient(circle at 0 0, rgba(56, 189, 248, 0.15), transparent 55%);
+      opacity: 0.9;
+      pointer-events: none;
+    }
+
+    .card-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.8);
+      color: var(--accent);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      border: 1px solid rgba(56, 189, 248, 0.25);
+    }
+
+    .chip-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--accent);
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.85);
+    }
+
+    h1 {
+      font-size: clamp(26px, 4vw, 32px);
+      margin-top: 14px;
+      margin-bottom: 6px;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .subtitle span {
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    .grid {
+      margin-top: 26px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 16px;
+    }
+
+    .link-card {
+      position: relative;
+      padding: 14px 16px 14px;
+      border-radius: var(--radius-xl);
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid rgba(51, 65, 85, 0.9);
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+      transition:
+        transform 0.16s ease-out,
+        box-shadow 0.16s ease-out,
+        border-color 0.16s ease-out,
+        background 0.16s ease-out;
+      overflow: hidden;
+    }
+
+    .link-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top left, var(--accent-soft), transparent 55%);
+      opacity: 0;
+      transition: opacity 0.18s ease-out;
+      pointer-events: none;
+    }
+
+    .link-card:hover::before {
+      opacity: 1;
+    }
+
+    .link-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 18px 30px rgba(0, 0, 0, 0.6);
+      border-color: rgba(56, 189, 248, 0.7);
+      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.96));
+    }
+
+    .link-main {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 4px;
+    }
+
+    .link-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      background: radial-gradient(circle at 30% 0, #22d3ee, #0ea5e9);
+      box-shadow: 0 10px 18px rgba(8, 47, 73, 0.75);
+      flex-shrink: 0;
+    }
+
+    .link-text-main {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .link-title {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .link-tag {
+      font-size: 11px;
+      color: var(--text-muted);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .link-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-left: 46px;
+    }
+
+    .link-arrow {
+      position: absolute;
+      right: 14px;
+      bottom: 12px;
+      font-size: 14px;
+      color: var(--accent);
+      opacity: 0.85;
+      transition: transform 0.16s ease-out;
+    }
+
+    .link-card:hover .link-arrow {
+      transform: translateX(3px);
+    }
+
+    footer {
+      margin-top: 20px;
+      font-size: 11px;
+      color: #6b7280;
+      text-align: center;
+    }
+
+    footer span {
+      color: var(--accent);
+    }
+
+    @media (max-width: 600px) {
+      .card {
+        padding: 22px 18px 18px;
+      }
+
+      .link-arrow {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="card">
+      <div class="card-inner">
+        <header>
+          <div class="chip">
+            <span class="chip-dot"></span>
+            Práctica – Three.js
+          </div>
+          <h1>Control de Modelos 3D</h1>
+          <p class="subtitle">
+            Carga y visualización de modelos usando <span>Three.js</span> y diferentes loaders.
+          </p>
+        </header>
+
+        <section class="grid">
+          <!-- FBX -->
+          <a class="link-card" href="./webgl_loader_fbx.html">
+            <div class="link-main">
+              <div class="link-icon">🐝</div>
+              <div class="link-text-main">
+                <span class="link-title">FBX Loader</span>
+                <span class="link-tag">Modelo animado (FBX)</span>
+              </div>
+            </div>
+            <p class="link-desc">
+              Carga y animación de un modelo FBX (abeja / personaje) con <strong>FBXLoader</strong>.
+            </p>
+            <span class="link-arrow">Ver escena →</span>
+          </a>
+
+          <!-- Collada Kinematics -->
+          <a class="link-card" href="./webgl_loader_collada_kinematics.html">
+            <div class="link-main">
+              <div class="link-icon">🤖</div>
+              <div class="link-text-main">
+                <span class="link-title">Collada – Kinematics</span>
+                <span class="link-tag">Robot articulado (DAE)</span>
+              </div>
+            </div>
+            <p class="link-desc">
+              Ejemplo de cinemática en un brazo robótico cargado con <strong>ColladaLoader</strong>.
+            </p>
+            <span class="link-arrow">Ver escena →</span>
+          </a>
+
+          <!-- Collada Skinning -->
+          <a class="link-card" href="./webgl_loader_collada_skinning.html">
+            <div class="link-main">
+              <div class="link-icon">🧍‍♀️</div>
+              <div class="link-text-main">
+                <span class="link-title">Collada – Skinning</span>
+                <span class="link-tag">Animación esquelética</span>
+              </div>
+            </div>
+            <p class="link-desc">
+              Modelo con animación esquelética (skinning) utilizando el formato <strong>Collada</strong>.
+            </p>
+            <span class="link-arrow">Ver escena →</span>
+          </a>
+
+          <!-- Collada simple -->
+          <a class="link-card" href="./webgl_loader_collada.html">
+            <div class="link-main">
+              <div class="link-icon">📦</div>
+              <div class="link-text-main">
+                <span class="link-title">Collada Loader</span>
+                <span class="link-tag">Modelo estático (DAE)</span>
+              </div>
+            </div>
+            <p class="link-desc">
+              Carga básica de un modelo Collada estático para visualización simple.
+            </p>
+            <span class="link-arrow">Ver escena →</span>
+          </a>
+
+          <!-- glTF AVIF -->
+          <a class="link-card" href="./webgl_loader_gltf_avif.html">
+            <div class="link-main">
+              <div class="link-icon">🧊</div>
+              <div class="link-text-main">
+                <span class="link-title">glTF – Texturas AVIF</span>
+                <span class="link-tag">Optimización de texturas</span>
+              </div>
+            </div>
+            <p class="link-desc">
+              Render de modelos glTF usando texturas en formato <strong>AVIF</strong> para mejor compresión.
+            </p>
+            <span class="link-arrow">Ver escena →</span>
+          </a>
+
+          <!-- glTF Compressed -->
+          <a class="link-card" href="./webgl_loader_gltf_compressed.html">
+            <div class="link-main">
+              <div class="link-icon">🧱</div>
+              <div class="link-text-main">
+                <span class="link-title">glTF – Compressed</span>
+                <span class="link-tag">Draco / compresión</span>
+              </div>
+            </div>
+            <p class="link-desc">
+              Carga de modelos glTF comprimidos (por ejemplo con <strong>Draco</strong>) para reducir tamaño.
+            </p>
+            <span class="link-arrow">Ver escena →</span>
+          </a>
+        </section>
+
+        <footer>
+          Práctica de graficación 3D con <span>Three.js</span> • Modelos cargados desde distintos formatos.
+        </footer>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
